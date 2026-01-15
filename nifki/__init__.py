@@ -437,19 +437,13 @@ def main():
                 "tools.staticdir.root": nifki_root,
                 "tools.staticfile.root": nifki_root,
             },
-            "/stylesheet.css": {
-                "tools.staticfile.on": True,
-                "tools.staticfile.filename": "stylesheet.css",
-            },
-            "/tutorial.txt": {
-                "tools.staticfile.on": True,
-                "tools.staticfile.filename": "templates/tutorial.txt",
+            "/static": {
+                "tools.staticdir.on": True,
+                "tools.staticdir.dir": "static",
             },
             "/favicon.ico": {
                 "tools.staticfile.on": True,
-                "tools.staticfile.filename": "favicon.ico",
+                "tools.staticfile.filename": "static/favicon.ico",
             },
-            "/images": {"tools.staticdir.on": True, "tools.staticdir.dir": "images"},
-            "/js": {"tools.staticdir.on": True, "tools.staticdir.dir": "js"},
         }
         cherrypy.quickstart(webapp, "/", conf)

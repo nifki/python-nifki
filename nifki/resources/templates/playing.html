@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
- <head>
-  <link rel="stylesheet" type="text/css" href="/stylesheet.css"/>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="/static/stylesheet.css" />
   <title>${pagename}</title>
 
   <!-- 3rd-party dependencies. -->
@@ -15,40 +16,45 @@
   <script src="/js/assembler.js"></script>
   <script src="/js/interpreter.js"></script>
   <script src="/js/nifki.js"></script>
- </head>
- <body>
-  <table class="all" cols="1" rows="1" align="center"><tr><td>
-   <h1 class="logo" align="center">
-    <a href="/">
-     <img src="/images/small-logo.png" alt="Nifki" style="float:left;"/>
-    </a>
-    ${pagename}
-   </h1>
-   <br />
-   <p align="center">${name}</p>
-   <center>
-     <canvas
-       id="game"
-       style="width: ${width}px; height: ${height}px"
-       tabIndex="1"
-       data-width="${width}"
-       data-height="${height}"
-       data-msPerFrame="%(msPerFrame)d"
-     >
-       The game should be here. Perhaps JavaScript or &lt;canvas&gt; are
-       turned off.
-     </canvas>
-   </center>
-   <table cols="2" rows="1" width="100%%"><tr><td align="left">
-    <a href="/pages/${pagename}/edit/">Edit</a> this game.
-   </td><td align="right">
-    Return to the <a href="/pages/">list of pages.</a>
-   </td></tr></table>
-  </td></tr></table>
+</head>
+
+<body>
+  <table class="all" cols="1" rows="1" align="center">
+    <tr>
+      <td>
+        <h1 class="logo" align="center">
+          <a href="/">
+            <img src="/static/images/small-logo.png" alt="Nifki" style="float:left;" />
+          </a>
+          ${pagename}
+        </h1>
+        <br />
+        <p align="center">${name}</p>
+        <center>
+          <canvas id="game" style="width: ${width}px; height: ${height}px" tabIndex="1" data-width="${width}"
+            data-height="${height}" data-msPerFrame="%(msPerFrame)d">
+            The game should be here. Perhaps JavaScript or &lt;canvas&gt; are
+            turned off.
+          </canvas>
+        </center>
+        <table cols="2" rows="1" width="100%%">
+          <tr>
+            <td align="left">
+              <a href="/pages/${pagename}/edit/">Edit</a> this game.
+            </td>
+            <td align="right">
+              Return to the <a href="/pages/">list of pages.</a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 
   <script>
     document.getElementById("game").focus();
     window.addEventListener("DOMContentLoaded", function () { playGame("${pagename}"); }, false);
   </script>
- </body>
+</body>
+
 </html>
