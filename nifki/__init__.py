@@ -162,6 +162,7 @@ class Pages:
                 pagename=pagename,
                 width=int(props["width"]),
                 height=int(props["height"]),
+                msPerFrame=int(props["msPerFrame"]),
                 random=int(time.time()),
                 name=props["name"],
             )
@@ -435,10 +436,6 @@ def main():
             "tools.staticdir.root": "/home/rrt/repo/nifki/python-nifki",
             "tools.staticfile.root": "/home/rrt/repo/nifki/python-nifki",
         },
-        "/nifki-lib.jar": {
-            "tools.staticfile.on": True,
-            "tools.staticfile.filename": "nifki-lib.jar",
-        },
         "/stylesheet.css": {
             "tools.staticfile.on": True,
             "tools.staticfile.filename": "stylesheet.css",
@@ -452,5 +449,6 @@ def main():
             "tools.staticfile.filename": "favicon.ico",
         },
         "/images": {"tools.staticdir.on": True, "tools.staticdir.dir": "images"},
+        "/js": {"tools.staticdir.on": True, "tools.staticdir.dir": "js"},
     }
     cherrypy.quickstart(webapp, "/", conf)
