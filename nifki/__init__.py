@@ -6,16 +6,17 @@ import string
 import subprocess
 import textwrap
 import time
+from pathlib import Path
 
 import cherrypy
 
 
-nifki_root = "/nonexistent"
+nifki_root = Path("/nonexistent")
 
 
 def template(filename, **kwargs):
     """A simple templating mechanism to keep big bits of HTML out of the code."""
-    with open(os.path.join(nifki_root, "templates", filename + ".html")) as fh:
+    with open(nifki_root / "templates" / f"{filename}.html") as fh:
         html = fh.read()
     return html % kwargs
 
@@ -105,7 +106,7 @@ class Pages:
     def index(self):
         pagenames = [
             page
-            for page in os.listdir(os.path.join(nifki_root, "wiki"))
+            for page in os.listdir(nifki_root / "wiki")
             if page != "nifki-out" and not page.startswith(".")
         ]
         pagenames.sort()
@@ -139,9 +140,7 @@ class Pages:
 
     def jar(self, pagename):
         """Returns the jar file for this page."""
-        with open(
-            os.path.join(nifki_root, "wiki/nifki-out", pagename + ".jar"), "rb"
-        ) as fh:
+        with open(nifki_root / "wiki" / "nifki-out" / f"{pagename}.jar", "rb") as fh:
             jar = fh.read()
         cherrypy.response.headers["Content-Type"] = "application/java-archive"
         cherrypy.response.headers["Last-Modified"] = cherrypy.response.headers["Date"]
@@ -153,12 +152,9 @@ class Pages:
         Returns the page with the applet tag on it, if the game compiled
         successfully, otherwise returns a page showing the compiler output.
         """
-        if os.path.exists(
-            os.path.join(nifki_root, "wiki", "nifki-out", f"{pagename}.jar")
-        ):
-            with open(
-                os.path.join(nifki_root, "wiki", pagename, "properties.txt")
-            ) as fh:
+        errfile = nifki_root / "wiki" / "nifki-out" / f"{pagename}.err"
+        if (nifki_root / "wiki" / "nifki-out" / f"{pagename}.jar").exists():
+            with open(nifki_root / "wiki" / pagename / "properties.txt") as fh:
                 props = parseProperties(fh.read())
             return template(
                 "playing",
@@ -169,12 +165,8 @@ class Pages:
                 random=int(time.time()),
                 name=props["name"],
             )
-        elif os.path.exists(
-            os.path.join(nifki_root, "wiki", "nifki-out", f"{pagename}.err")
-        ):
-            with open(
-                os.path.join(nifki_root, "wiki", "nifki-out", f"{pagename}.err")
-            ) as fh:
+        elif errfile.exists():
+            with open(errfile) as fh:
                 err = fh.read()
             lines = []
             for line in err.split("\n"):
@@ -186,13 +178,13 @@ class Pages:
             raise cherrypy.HTTPRedirect(f"/pages/{pagename}/edit/")
 
     def edit(self, pagename):
-        if not os.path.isdir(os.path.join(nifki_root, "wiki", pagename)):
+        if not (nifki_root / "wiki" / pagename).is_dir():
             return template("no-such-page", pagename=pagename)
         # Load "source.sss" file.
-        with open(os.path.join(nifki_root, "wiki", pagename, "source.sss")) as fh:
+        with open(nifki_root / "wiki" / pagename / "source.sss") as fh:
             source = fh.read()
         # Load "properties.txt" file.
-        with open(os.path.join(nifki_root, "wiki", pagename, "properties.txt")) as fh:
+        with open(nifki_root / "wiki" / pagename / "properties.txt") as fh:
             props = parseProperties(fh.read())
         # Return an editing page.
         return self.editPage(
@@ -232,7 +224,7 @@ class Pages:
         else:
             errormessage = ""
         # Compile a list of the images attached to the page.
-        res_dir = os.path.join(nifki_root, "wiki", pagename, "res")
+        res_dir = nifki_root / "wiki" / pagename / "res"
         os.makedirs(res_dir, exist_ok=True)
         imagelist = os.listdir(res_dir)
         imagelist.sort()
@@ -304,7 +296,7 @@ class Pages:
                 "entirely capital letters, and must have at least three "
                 "characters and at most twenty."
             )
-        elif os.path.isdir(os.path.join(nifki_root, "wiki", newpage)):
+        elif (nifki_root / "wiki" / newpage).is_dir():
             errormessage = (
                 "Your changes have not been saved because a page called "
                 f"'{newpage}' already exists."
@@ -312,8 +304,8 @@ class Pages:
         else:
             # New page.
             shutil.copytree(
-                os.path.join(nifki_root, "wiki", pagename),
-                os.path.join(nifki_root, "wiki", newpage),
+                nifki_root / "wiki" / pagename,
+                nifki_root / "wiki" / newpage,
             )
         # Check that width, height and msPerFrame are integers.
         try:
@@ -375,9 +367,7 @@ class Pages:
                 fname = "".join([x for x in fname if x in allowed])
                 if not isValidPageName(fname):
                     fname = "image"
-                existingNames = os.listdir(
-                    os.path.join(nifki_root, "wiki", pagename, "res")
-                )
+                existingNames = os.listdir(nifki_root / "wiki" / pagename / "res")
                 if fname in existingNames:
                     count = 1
                     while True:
@@ -386,9 +376,7 @@ class Pages:
                             break
                         count += 1
                     fname = proposedName
-                with open(
-                    os.path.join(nifki_root, "wiki", pagename, "res", fname), "wb"
-                ) as fh:
+                with open(nifki_root / "wiki" / pagename / "res" / fname, "wb") as fh:
                     fh.write(imageData)
         return self.editPage(
             pagename,
@@ -409,7 +397,7 @@ class Pages:
         strings except 'showDebug' which is a boolean.
         """
         # Save the source file, 'source.sss'.
-        with open(os.path.join(nifki_root, "wiki", pagename, "source.sss"), "w") as fh:
+        with open(nifki_root / "wiki" / pagename / "source.sss", "w") as fh:
             fh.write(source)
         # Save the properties file, 'properties.txt'.
         props = makeProperties(
@@ -421,9 +409,7 @@ class Pages:
                 ("debug", ["false", "true"][showDebug]),
             ]
         )
-        with open(
-            os.path.join(nifki_root, "wiki", pagename, "properties.txt"), "w"
-        ) as fh:
+        with open(nifki_root / "wiki" / pagename / "properties.txt", "w") as fh:
             fh.write(props)
         # Run the compiler.
         errcode = subprocess.call(["java", "-jar", "compiler.jar", "wiki", pagename])
@@ -434,9 +420,7 @@ class Pages:
             raise cherrypy.HTTPRedirect(f"/pages/{pagename}/play/")
 
     def res(self, pagename, imagename):
-        with open(
-            os.path.join(nifki_root, "wiki", pagename, "res", "imagename"), "rb"
-        ) as fh:
+        with open(nifki_root / "wiki" / pagename / "res" / "imagename", "rb") as fh:
             image = fh.read()
         cherrypy.response.headers["Content-Type"] = "image/png"
         return image
@@ -447,7 +431,7 @@ def main():
     webapp.pages = Pages()
     with importlib.resources.as_file(importlib.resources.files()) as fspath:
         global nifki_root
-        nifki_root = os.path.join(fspath, "resources")
+        nifki_root = Path(fspath) / "resources"
         conf = {
             "global": {
                 "tools.staticdir.root": nifki_root,
