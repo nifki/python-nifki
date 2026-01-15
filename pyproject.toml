@@ -5,6 +5,7 @@ description = "Python Nifki server"
 license = "GPL-3.0-or-later"
 authors = [
     { name = "Alistair Turnbull", email = "apt1002@minworks.co.uk" },
+    { name = "Tom Lynn", email = "tom@beasts.org" },
     { name = "Reuben Thomas", email = "rrt@sc3d.org" },
 ]
 readme = "README.md"
