@@ -134,17 +134,10 @@ class Pages:
         return httpError(404, f"Unknown action: {action}")
 
     def jar(self, pagename):
-        """Returns the jar file for this page.
-
-        Note that the requested filename is completely ignored. In fact,
-        we vary the filename in order to defeat the browser cache.
-        """
+        """Returns the jar file for this page."""
         with open(os.path.join("wiki/nifki-out", pagename + ".jar"), "rb") as fh:
             jar = fh.read()
         cherrypy.response.headers["Content-Type"] = "application/java-archive"
-        # Mozilla refuses to cache anything without a "Last-Modified" header,
-        # and ludicrously downloads a copy of the jar file for every entry
-        # contained within it. Really! Top quality!
         cherrypy.response.headers["Last-Modified"] = cherrypy.response.headers["Date"]
         return jar
 
