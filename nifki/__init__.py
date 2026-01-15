@@ -101,7 +101,11 @@ class Pages:
 
     @cherrypy.expose
     def index(self):
-        pagenames = [page for page in os.listdir("wiki") if page != "nifki-out"]
+        pagenames = [
+            page
+            for page in os.listdir("wiki")
+            if page != "nifki-out" and not page.startswith(".")
+        ]
         pagenames.sort()
         pagenames = [
             f'   <li><a href="/pages/{page}/play/">{page}</a></li>'
