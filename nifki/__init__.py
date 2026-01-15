@@ -429,10 +429,6 @@ def main():
     webapp.pages = Pages()
     conf = {
         "global": {
-            "server.socketPort": 8080,
-            "server.socketHost": "127.0.0.1",
-            "server.logAccessFile": "/var/log/nifki",
-            "server.logFile": "/var/log/nifki",
             "tools.staticdir.root": "/home/rrt/repo/nifki/python-nifki",
             "tools.staticfile.root": "/home/rrt/repo/nifki/python-nifki",
         },
