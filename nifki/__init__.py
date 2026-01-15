@@ -18,7 +18,7 @@ def template(filename, **kwargs):
     """A simple templating mechanism to keep big bits of HTML out of the code."""
     with open(nifki_root / "templates" / f"{filename}.html") as fh:
         html = fh.read()
-    return html % kwargs
+    return string.Template(html).substitute(kwargs)
 
 
 def template2(filename, title, **kwargs):

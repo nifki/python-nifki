@@ -2,7 +2,7 @@
 <html>
  <head>
   <link rel="stylesheet" type="text/css" href="/stylesheet.css"/>
-  <title>%(pagename)s</title>
+  <title>${pagename}</title>
 
   <!-- 3rd-party dependencies. -->
   <script src="/js/jszip.min.js"></script>
@@ -22,17 +22,17 @@
     <a href="/">
      <img src="/images/small-logo.png" alt="Nifki" style="float:left;"/>
     </a>
-    %(pagename)s
+    ${pagename}
    </h1>
    <br />
-   <p align="center">%(name)s</p>
+   <p align="center">${name}</p>
    <center>
      <canvas
        id="game"
-       style="width: %(width)dpx; height: %(height)dpx"
+       style="width: ${width}px; height: ${height}px"
        tabIndex="1"
-       data-width="%(width)d"
-       data-height="%(height)d"
+       data-width="${width}"
+       data-height="${height}"
        data-msPerFrame="%(msPerFrame)d"
      >
        The game should be here. Perhaps JavaScript or &lt;canvas&gt; are
@@ -40,7 +40,7 @@
      </canvas>
    </center>
    <table cols="2" rows="1" width="100%%"><tr><td align="left">
-    <a href="/pages/%(pagename)s/edit/">Edit</a> this game.
+    <a href="/pages/${pagename}/edit/">Edit</a> this game.
    </td><td align="right">
     Return to the <a href="/pages/">list of pages.</a>
    </td></tr></table>
@@ -48,7 +48,7 @@
 
   <script>
     document.getElementById("game").focus();
-    window.addEventListener("DOMContentLoaded", function () { playGame("%(pagename)s"); }, false);
+    window.addEventListener("DOMContentLoaded", function () { playGame("${pagename}"); }, false);
   </script>
  </body>
 </html>

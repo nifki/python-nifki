@@ -25,7 +25,7 @@ function insertCode(text)
 }
    -->
   </script>
-  <title>Editing "%(pagename)s"</title>
+  <title>Editing "${pagename}"</title>
  </head>
  <body>
   <table class="all" cols="1" rows="1" align="center"><tr><td>
@@ -33,12 +33,12 @@ function insertCode(text)
     <a href="/">
      <img src="/images/small-logo.png" alt="Nifki" style="float:left;"/>
     </a>
-    Editing "%(pagename)s"
+    Editing "${pagename}"
    </h1>
-   %(errormessage)s
+   ${errormessage}
    <form
     method="post"
-    action="/pages/%(pagename)s/save/"
+    action="/pages/${pagename}/save/"
     enctype="multipart/form-data"
    >
     <table cols="4" rows="4" align="center"><tr>
@@ -47,16 +47,16 @@ function insertCode(text)
       <textarea
        id="source" name="source"
        rows="30" cols="80"
-      >%(source)s</textarea>
+      >${source}</textarea>
      </td>
     </tr><tr>
      <td align="left">
       Width in pixels:
-      <input name="width" value="%(width)s" size="5" maxlength="5"/>
+      <input name="width" value="${width}" size="5" maxlength="5"/>
      </td>
      <td align="left">
       Height in pixels:
-      <input name="height" value="%(height)s" size="5" maxlength="5"/>
+      <input name="height" value="${height}" size="5" maxlength="5"/>
      </td>
      <td align="left">
       Milliseconds per frame:
@@ -69,20 +69,20 @@ function insertCode(text)
     </tr><tr>
      <td colspan="4" align="left">
       Tag line:
-      <input name="name" value="%(name)s" size="80"/>
+      <input name="name" value="${name}" size="80"/>
      </td>
     </tr><tr>
      <td colspan="4" align="right">
       <input type="submit" name="save" accesskey="S" value="Save as"/>
-      <input name="newpage" value="%(newpage)s" size="10" maxlength="20"/>
+      <input name="newpage" value="${newpage}" size="10" maxlength="20"/>
      </td>
     </tr></table>
     <p style="margin-right: 10px;" align="right">
-     <a href="/pages/%(pagename)s/play/">Cancel changes</a>
+     <a href="/pages/${pagename}/play/">Cancel changes</a>
     </p>
     <div id="gameSprites">
      <h2 align="center">Pictures attached to this page</h2>
-%(imagelist)s
+${imagelist}
      Upload image:
      <input
       type="file" accept="image/png"
