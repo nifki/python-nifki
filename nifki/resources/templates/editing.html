@@ -2,28 +2,26 @@
 
 <head>
   <link rel="stylesheet" type="text/css" href="/static/stylesheet.css" />
-  <script language="JavaScript">
-    < !-
-      function addText(input, insText) {
-        input.focus();
-        if (input.createTextRange) {
-          document.selection.createRange().text += insText;
-        } else if (input.setSelectionRange) {
-          var start = input.selectionStart;
-          var end = input.selectionEnd;
-          var len = insText.length;
-          input.value =
-            input.value.substr(0, start) + insText + input.value.substr(end);
-          input.setSelectionRange(start + len, start + len);
-        } else {
-          input.value += insText;
-        }
+  <script type="text/javascript">
+    function addText(input, insText) {
+      input.focus();
+      if (input.createTextRange) {
+        document.selection.createRange().text += insText;
+      } else if (input.setSelectionRange) {
+        var start = input.selectionStart;
+        var end = input.selectionEnd;
+        var len = insText.length;
+        input.value =
+          input.value.substr(0, start) + insText + input.value.substr(end);
+        input.setSelectionRange(start + len, start + len);
+      } else {
+        input.value += insText;
       }
+    }
     function insertCode(text) {
       var source = document.getElementById("source");
       addText(source, text);
     }
-    ->
   </script>
   <title>Editing "${pagename}"</title>
 </head>
