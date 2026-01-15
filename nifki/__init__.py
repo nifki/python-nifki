@@ -427,16 +427,10 @@ class Pages:
 
 
 def main():
-    webapp = Wiki()
-    webapp.pages = Pages()
     with importlib.resources.as_file(importlib.resources.files()) as fspath:
         global nifki_root
         nifki_root = Path(fspath) / "resources"
         conf = {
-            "global": {
-                "tools.staticdir.root": nifki_root,
-                "tools.staticfile.root": nifki_root,
-            },
             "/static": {
                 "tools.staticdir.on": True,
                 "tools.staticdir.dir": "static",
@@ -446,4 +440,13 @@ def main():
                 "tools.staticfile.filename": "static/favicon.ico",
             },
         }
-        cherrypy.quickstart(webapp, "/", conf)
+        cherrypy.config.update(
+            {
+                "tools.staticdir.root": nifki_root,
+                "tools.staticfile.root": nifki_root,
+            }
+        )
+        cherrypy.tree.mount(Wiki(), "/", conf)
+        cherrypy.tree.mount(Pages(), "/pages", conf)
+        cherrypy.engine.start()
+        cherrypy.engine.block()
