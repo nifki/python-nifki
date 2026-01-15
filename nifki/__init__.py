@@ -409,7 +409,9 @@ class Pages:
         with open(nifki_root / "wiki" / pagename / "properties.txt", "w") as fh:
             fh.write(props)
         # Run the compiler.
-        errcode = subprocess.call(["java", "-jar", "compiler.jar", "wiki", pagename])
+        errcode = subprocess.call(
+            ["java", "-jar", nifki_root / "compiler.jar", nifki_root / "wiki", pagename]
+        )
         if errcode != 0:
             cherrypy.response.headers["Status"] = 500
             return template("compiler-error")
