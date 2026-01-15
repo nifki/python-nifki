@@ -1,5 +1,5 @@
 [project]
-name = "python-nifki"
+name = "nifki"
 version = "0.1"
 description = "Python Nifki server"
 license = "GPL-3.0-or-later"
