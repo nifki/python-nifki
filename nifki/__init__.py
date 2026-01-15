@@ -21,15 +21,6 @@ def template(filename, **kwargs):
     return string.Template(html).substitute(kwargs)
 
 
-def template2(filename, title, **kwargs):
-    """A more complicated templating mechanism.
-
-    Loads 'filename' and substitutes 'kwargs' into it, then subtitutes the result
-    and 'title' into the file 'base-template.html'.
-    """
-    return template("base-template", title=title, body=template(filename, **kwargs))
-
-
 def group(items, groupSize, pad):
     """Appends copies of 'pad' to 'items' until its length is a multiple of 'groupSize'.
 
@@ -114,9 +105,8 @@ class Pages:
             f'   <li><a href="/pages/{page}/play/">{page}</a></li>'
             for page in pagenames
         ]
-        return template2(
+        return template(
             "list-of-all-pages",
-            title="List of All Pages",
             pagenames="\n".join(pagenames),
         )
 

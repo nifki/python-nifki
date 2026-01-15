@@ -1,8 +1,42 @@
-    <p align="center">
-     Here is the complete list of all Nifki pages written so far:
-    </p>
-     <table align="center"><tr><td>
-      <ul>
-${pagenames}
-      </ul>
-     </td></tr></table>
+<html>
+
+<head>
+      <link rel="stylesheet" type="text/css" href="/static/stylesheet.css" />
+      <title>List of All Pages</title>
+</head>
+
+<body>
+      <table class="all" cols="1" rows="1" align="center">
+            <tr>
+                  <td>
+                        <h1 class="logo">
+                              <a href="/">
+                                    <img src="/static/images/small-logo.png" alt="Nifki" style="float:left;" />
+                              </a>
+                              List of All Pages
+                        </h1>
+                        <br />
+                        <table align="center">
+                              <tr>
+                                    <td>
+                                          <p align="center">
+                                                Here is the complete list of all Nifki pages written so far:
+                                          </p>
+                                          <table align="center">
+                                                <tr>
+                                                      <td>
+                                                            <ul>
+                                                                  ${pagenames}
+                                                            </ul>
+                                                      </td>
+                                                </tr>
+                                          </table>
+                                    </td>
+                              </tr>
+                        </table>
+                  </td>
+            </tr>
+      </table>
+</body>
+
+</html>
