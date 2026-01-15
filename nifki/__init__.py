@@ -9,6 +9,7 @@ import time
 from pathlib import Path
 
 import cherrypy
+import mistletoe
 
 
 nifki_root = Path("/nonexistent")
@@ -84,6 +85,12 @@ class Wiki:
     @cherrypy.expose
     def index(self):
         return template("welcome-to-nifki")
+
+    @cherrypy.expose
+    def tutorial(self):
+        with open(nifki_root / "tutorial.md") as fh:
+            text = fh.read()
+        return mistletoe.markdown(text)
 
 
 class Pages:

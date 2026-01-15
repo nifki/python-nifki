@@ -12,7 +12,7 @@ readme = "README.md"
 urls = { Homepage = "https://github.com/nifki/python-nifki" }
 requires-python = ">= 3.13"
 classifiers = ["Environment :: Server", "Programming Language :: Python :: 3"]
-dependencies = ["cherrypy"]
+dependencies = ["cherrypy", "mistletoe"]
 
 [project.scripts]
 nifki = "nifki:main"
