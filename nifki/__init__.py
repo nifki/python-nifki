@@ -69,37 +69,19 @@ def makeProperties(properties):
     return "".join([f"{k}: {v}\n" for (k, v) in properties])
 
 
-def allCharsIn(s, allowed):
-    for c in s:
-        if c not in allowed:
-            return False
-    return True
-
-
-def allUpperCase(s):
-    return allCharsIn(s, string.ascii_uppercase)
-
-
-def allAlphaNum(s):
-    return allCharsIn(s, string.ascii_letters + string.digits)
-
-
-def isValidPageName(pagename):
+def isValidPageName(pagename: str) -> bool:
     """Check whether a page name is valid.
 
     Page names must start with a letter, must contain only letters and
     digits, must not be entirely capital letters, and must have at least three
     characters and at most twenty.
     """
-    if not (3 <= len(pagename) <= 20):
-        return False
-    if pagename[0] not in string.ascii_letters:
-        return False
-    if not allAlphaNum(pagename):
-        return False
-    if allUpperCase(pagename):
-        return False
-    return True
+    return (
+        3 <= len(pagename) <= 20
+        and pagename[0].isalpha()
+        and pagename.isalnum()
+        and not pagename.isupper()
+    )
 
 
 class Wiki:
