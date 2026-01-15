@@ -58,10 +58,10 @@
               </td>
               <td align="left">
                 Milliseconds per frame:
-                <input name="msPerFrame" value="%(msPerFrame)s" size="5" maxlength="5" />
+                <input name="msPerFrame" value="${msPerFrame}" size="5" maxlength="5" />
               </td>
               <td align="right">
-                <input type="checkbox" name="debug" value="debug" %(debugChecked)s />
+                <input type="checkbox" name="debug" value="debug" ${debugChecked} />
                 Show debug output
               </td>
             </tr>
@@ -85,7 +85,7 @@
             <h2 align="center">Pictures attached to this page</h2>
             ${imagelist}
             Upload image:
-            <input type="file" accept="image/png" name="uploadedImage" value="%(uploadedImage)s" size="60" />
+            <input type="file" accept="image/png" name="uploadedImage" value="${uploadedImage}" size="60" />
             <input type="submit" name="upload" accesskey="U" value="Upload" />
           </div>
         </form>
