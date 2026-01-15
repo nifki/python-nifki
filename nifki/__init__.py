@@ -2,31 +2,17 @@ import html
 import os
 import shutil
 import string
+import subprocess
 import textwrap
 import time
 
 import cherrypy
 
 
-os.chdir("/home/rrt/repo/nifki/python-nifki")
-
-
-def readfile(filename):
-    """Returns the contents of the specified file as a (byte) string.
-
-    This subroutine closes the file after reading it, which is necessary to
-    prevent running out of file descriptors before the garbage collector
-    collects the file objects.
-    """
-    f = open(filename)
-    contents = f.read()
-    f.close()
-    return contents
-
-
 def template(filename, **kwargs):
     """A simple templating mechanism to keep big bits of HTML out of the code."""
-    html = readfile(os.path.join("templates", filename + ".html"))
+    with open(os.path.join("templates", filename + ".html")) as fh:
+        html = fh.read()
     return html % kwargs
 
 
@@ -169,9 +155,8 @@ class Pages:
         Note that the requested filename is completely ignored. In fact,
         we vary the filename in order to defeat the browser cache.
         """
-        jarfile = open(os.path.join("wiki/nifki-out", pagename + ".jar"), "rb")
-        jar = jarfile.read()
-        jarfile.close()
+        with open(os.path.join("wiki/nifki-out", pagename + ".jar"), "rb") as fh:
+            jar = fh.read()
         cherrypy.response.headers["Content-Type"] = "application/java-archive"
         # Mozilla refuses to cache anything without a "Last-Modified" header,
         # and ludicrously downloads a copy of the jar file for every entry
@@ -186,9 +171,8 @@ class Pages:
         successfully, otherwise returns a page showing the compiler output.
         """
         if os.path.exists(f"wiki/nifki-out/{pagename}.jar"):
-            propsfile = open(f"wiki/{pagename}/properties.txt", "rb")
-            props = parseProperties(propsfile.read().decode("UTF-8"))
-            propsfile.close()
+            with open(f"wiki/{pagename}/properties.txt") as fh:
+                props = parseProperties(fh.read())
             return template(
                 "playing",
                 pagename=pagename,
@@ -198,9 +182,8 @@ class Pages:
                 name=props["name"],
             )
         elif os.path.exists(f"wiki/nifki-out/{pagename}.err"):
-            errfile = open(f"wiki/nifki-out/{pagename}.err", "rb")
-            err = errfile.read().decode("UTF-8")
-            errfile.close()
+            with open(f"wiki/nifki-out/{pagename}.err") as fh:
+                err = fh.read()
             lines = []
             for line in err.split("\n"):
                 for shortline in textwrap.wrap(line, width=80):
@@ -214,13 +197,11 @@ class Pages:
         if not os.path.isdir(f"wiki/{pagename}/"):
             return template("no-such-page", pagename=pagename)
         # Load "source.sss" file.
-        sourcefile = open(f"wiki/{pagename}/source.sss", "rb")
-        source = sourcefile.read().decode("UTF-8")
-        sourcefile.close()
+        with open(f"wiki/{pagename}/source.sss") as fh:
+            source = fh.read()
         # Load "properties.txt" file.
-        propsfile = open(f"wiki/{pagename}/properties.txt", "rb")
-        props = parseProperties(propsfile.read().decode("UTF-8"))
-        propsfile.close()
+        with open(f"wiki/{pagename}/properties.txt") as fh:
+            props = parseProperties(fh.read())
         # Return an editing page.
         return self.editPage(
             pagename,
@@ -408,9 +389,8 @@ class Pages:
                             break
                         count += 1
                     fname = proposedName
-                imageFile = open(f"wiki/{pagename}/res/{fname}", "wb")
-                imageFile.write(imageData)
-                imageFile.close()
+                with open(f"wiki/{pagename}/res/{fname}", "wb") as fh:
+                    fh.write(imageData)
         return self.editPage(
             pagename,
             errormessage,
@@ -430,9 +410,8 @@ class Pages:
         strings except 'showDebug' which is a boolean.
         """
         # Save the source file, 'source.sss'.
-        sourcefile = open(f"wiki/{pagename}/source.sss", "wb")
-        sourcefile.write(source.encode("UTF-8"))
-        sourcefile.close()
+        with open(f"wiki/{pagename}/source.sss", "w") as fh:
+            fh.write(source)
         # Save the properties file, 'properties.txt'.
         props = makeProperties(
             [
@@ -443,21 +422,19 @@ class Pages:
                 ("debug", ["false", "true"][showDebug]),
             ]
         )
-        propsfile = open(f"wiki/{pagename}/properties.txt", "wb")
-        propsfile.write(props.encode("UTF-8"))
-        propsfile.close()
+        with open(f"wiki/{pagename}/properties.txt", "w") as fh:
+            fh.write(props)
         # Run the compiler.
-        errcode = os.system(f"java -jar compiler.jar wiki {pagename}")
-        if errcode:
+        errcode = subprocess.call(["java", "-jar", "compiler.jar", "wiki", pagename])
+        if errcode != 0:
             cherrypy.response.headers["Status"] = 500
             return template("compiler-error")
         else:
             raise cherrypy.HTTPRedirect(f"/pages/{pagename}/play/")
 
     def res(self, pagename, imagename):
-        imagefile = open(f"wiki/{pagename}/res/{imagename}", "rb")
-        image = imagefile.read()
-        imagefile.close()
+        with open(f"wiki/{pagename}/res/{imagename}", "rb") as fh:
+            image = fh.read()
         cherrypy.response.headers["Content-Type"] = "image/png"
         return image
 
