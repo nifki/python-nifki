@@ -420,7 +420,7 @@ class Pages:
             raise cherrypy.HTTPRedirect(f"/pages/{pagename}/play/")
 
     def res(self, pagename, imagename):
-        with open(nifki_root / "wiki" / pagename / "res" / "imagename", "rb") as fh:
+        with open(nifki_root / "wiki" / pagename / "res" / imagename, "rb") as fh:
             image = fh.read()
         cherrypy.response.headers["Content-Type"] = "image/png"
         return image
