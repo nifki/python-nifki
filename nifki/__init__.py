@@ -19,9 +19,8 @@ def template(filename, **kwargs):
 def template2(filename, title, **kwargs):
     """A more complicated templating mechanism.
 
-    Loads 'filename' and substitutes
-    'kwargs' into it, then subtitutes the result and 'title' into the file
-    'base-template.html'.
+    Loads 'filename' and substitutes 'kwargs' into it, then subtitutes the result
+    and 'title' into the file 'base-template.html'.
     """
     return template("base-template", title=title, body=template(filename, **kwargs))
 
@@ -29,8 +28,7 @@ def template2(filename, title, **kwargs):
 def group(items, groupSize, pad):
     """Appends copies of 'pad' to 'items' until its length is a multiple of 'groupSize'.
 
-    Then groups the items 'groupSize' at a time and returns a list
-    of groups.
+    Then groups the items 'groupSize' at a time and returns a list of groups.
     """
     while len(items) % groupSize != 0:
         items.append(pad)
@@ -72,8 +70,8 @@ def makeProperties(properties):
 def isValidPageName(pagename: str) -> bool:
     """Check whether a page name is valid.
 
-    Page names must start with a letter, must contain only letters and
-    digits, must not be entirely capital letters, and must have at least three
+    Page names must start with a letter, must contain only letters and digits,
+    must not be entirely capital letters, and must have at least three
     characters and at most twenty.
     """
     return (
