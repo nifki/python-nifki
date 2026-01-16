@@ -342,39 +342,44 @@ class Pages:
         debug,
     ):
         errormessage = None
-        magic = uploadedImage.file.read(4)
-        if not magic:
-            errormessage = "Image file not found."
-        elif magic[1:4] != b"PNG" and magic[:2] != b"\xff\xd8":
-            errormessage = "Images must be in PNG or JPEG format."
+        if uploadedImage.file is None:
+            errormessage = "No image supplied."
         else:
-            imageData = magic + uploadedImage.file.read(102400 - len(magic))
-            if uploadedImage.file.read(1):
-                errormessage = "Image files must be smaller than 100K."
-            if not errormessage:
-                fname = uploadedImage.filename
-                fname = os.path.basename(fname)
-                if (
-                    fname.lower().endswith(".png")
-                    or fname.lower().endswith(".jpg")
-                    or fname.lower().endswith(".jpeg")
-                ):
-                    fname = fname[: fname.rfind(".")]
-                allowed = string.ascii_letters + string.digits
-                fname = "".join([x for x in fname if x in allowed])
-                if not isValidPageName(fname):
-                    fname = "image"
-                existingNames = os.listdir(nifki_root / "wiki" / pagename / "res")
-                if fname in existingNames:
-                    count = 1
-                    while True:
-                        proposedName = f"{fname}{count}"
-                        if proposedName not in existingNames:
-                            break
-                        count += 1
-                    fname = proposedName
-                with open(nifki_root / "wiki" / pagename / "res" / fname, "wb") as fh:
-                    fh.write(imageData)
+            magic = uploadedImage.file.read(4)
+            if not magic:
+                errormessage = "Image file not found."
+            elif magic[1:4] != b"PNG" and magic[:2] != b"\xff\xd8":
+                errormessage = "Images must be in PNG or JPEG format."
+            else:
+                imageData = magic + uploadedImage.file.read(102400 - len(magic))
+                if uploadedImage.file.read(1):
+                    errormessage = "Image files must be smaller than 100K."
+                if not errormessage:
+                    fname = uploadedImage.filename
+                    fname = os.path.basename(fname)
+                    if (
+                        fname.lower().endswith(".png")
+                        or fname.lower().endswith(".jpg")
+                        or fname.lower().endswith(".jpeg")
+                    ):
+                        fname = fname[: fname.rfind(".")]
+                    allowed = string.ascii_letters + string.digits
+                    fname = "".join([x for x in fname if x in allowed])
+                    if not isValidPageName(fname):
+                        fname = "image"
+                    existingNames = os.listdir(nifki_root / "wiki" / pagename / "res")
+                    if fname in existingNames:
+                        count = 1
+                        while True:
+                            proposedName = f"{fname}{count}"
+                            if proposedName not in existingNames:
+                                break
+                            count += 1
+                        fname = proposedName
+                    with open(
+                        nifki_root / "wiki" / pagename / "res" / fname, "wb"
+                    ) as fh:
+                        fh.write(imageData)
         return self.editPage(
             pagename,
             errormessage,
