@@ -345,7 +345,7 @@ class Pages:
         magic = uploadedImage.file.read(4)
         if not magic:
             errormessage = "Image file not found."
-        elif magic[1:4] != "PNG" and magic[:2] != "\xff\xd8":
+        elif magic[1:4] != b"PNG" and magic[:2] != b"\xff\xd8":
             errormessage = "Images must be in PNG or JPEG format."
         else:
             imageData = magic + uploadedImage.file.read(102400 - len(magic))
