@@ -19,7 +19,7 @@ Now that the `Rocks` page exists, the minimal maze game is written as follows:
 Rocks_playUntilWin(["####", "#A+#", "####"])
 ```
 
-In addition to global variables there are also local variables, which are private to subroutine, let alone a page. Loop variables and subroutine arguments are always local variables. You are discouraged from using a global and a local with the same name on the same page. With the exception of subroutine names and picture names, which are always global variables, variables are local by default. To make a variable global, every assignment to it must either use a page prefix (e.g. `Rocks_`) or the keyword `GLOBAL`. When reading from a global variable, the page prefix can be omitted if the variable belongs to your own page.
+In addition to global variables there are also local variables, which are private to subroutine, let alone a page. Loop variables and subroutine arguments are always local variables. You can’t use a global and a local with the same name on the same page. With the exception of subroutine names and picture names, which are always global variables, variables are local by default. To make a variable global, every assignment to it must either use a page prefix (e.g. `Rocks_`) or the keyword `GLOBAL`. When reading from a global variable, the page prefix can be omitted if the variable belongs to your own page.
 
 Here’s a simple program that uses local variables `pos` and `char`:
 
